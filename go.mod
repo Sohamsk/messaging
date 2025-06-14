@@ -1,5 +1,5 @@
-module message_mini
+module github.com/Sohamsk/messaging
 
 go 1.24.2
 
-require github.com/gorilla/websocket v1.5.3 // indirect
+require github.com/gorilla/websocket v1.5.3

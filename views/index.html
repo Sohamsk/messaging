@@ -3,29 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTMX Messaging Page</title>
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/index.css">
 </head>
 
 <body>
-
-    <h1>HTMX Messaging</h1>
-
-    <div id="messages" class="messages">
-        <!-- Messages will load here -->
+    <div id="app">
+        <form hx-post="/login" hx-target="#app" hx-swap="innerHTML" id="login-form">
+            <div class="input-area">
+                <input type="text" name="username" placeholder="Enter your username..." required autofocus />
+                <button type="submit">Join Chat</button>
+            </div>
+        </form>
     </div>
-
-    <form id="send-form"
-    hx-post="/send"
-    hx-trigger="submit"
-    hx-swap="none">
-        <div class="input-area">
-            <input type="text" name="message" placeholder="Type your message..." required autofocus />
-            <button type="submit">Send</button>
-        </div>
-    </form>
-    <script src="/static/js/index.js"></script>
 </body>
 
 </html>

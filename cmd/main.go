@@ -16,6 +16,7 @@ func main() {
 
 	http.Handle("GET /static/", http.StripPrefix("/static/", fs))
 
+	http.HandleFunc("POST /login", handlers.HandleLogin)
 	http.HandleFunc("POST /send", handlers.HandleSend(hub))
 	http.HandleFunc("/ws", hub.Connect)
 	http.HandleFunc("/", handlers.ServeHome)

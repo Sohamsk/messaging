@@ -1,22 +1,29 @@
-const ws = new WebSocket("ws://" + location.host + "/ws")
+const chatDiv = document.getElementById("chat-app");
+const username = chatDiv.dataset.username;
+
+const ws = new WebSocket(
+  "ws://" + location.host + "/ws?username=" + encodeURIComponent(username),
+);
 
 ws.onmessage = (event) => {
-    const data = event.data
+  const data = event.data;
 
-    const div = document.createElement("div")
-    div.classList.add("message")
-    div.textContent = data
+  const div = document.createElement("div");
+  div.classList.add("message");
+  div.textContent = data;
 
-    const messages = document.getElementById("messages")
-    messages.appendChild(div)
+  const messages = document.getElementById("messages");
+  messages.appendChild(div);
 
-    messages.scrollTop = messages.scrollHeight
-}
+  messages.scrollTop = messages.scrollHeight;
+};
 
 ws.onclose = () => {
-    console.log("Websocket Closed")
-}
+  console.log("Websocket Closed");
+};
 
-document.getElementById('send-form').addEventListener('htmx:afterRequest', function(evt) {
+document
+  .getElementById("send-form")
+  .addEventListener("htmx:afterRequest", function (evt) {
     this.reset();
-});
+  });

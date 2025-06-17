@@ -3,6 +3,9 @@ package handlers
 import (
 	"net/http"
 	"text/template"
+
+	"github.com/Sohamsk/messaging/internal/service/sessions"
+	"github.com/google/uuid"
 )
 
 var templ = template.Must(template.ParseFiles("./views/message.page.html"))
@@ -15,11 +18,22 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	name := r.FormValue("username")
-	data := struct {
-		Username string
-	}{
-		Username: name,
+	if name == "" {
+		http.Error(w, "invalid request", http.StatusBadRequest)
+		return
 	}
 
-	templ.Execute(w, data)
+	sessionId := uuid.New()
+	sessions.Create(sessionId.String(), name)
+	http.SetCookie(w, &http.Cookie{
+		Name:  "session_id",
+		Value: sessionId.String(),
+
+		HttpOnly: true,
+		// Secure: true,
+		Path:     "/",
+		SameSite: http.SameSiteLaxMode,
+	})
+
+	templ.Execute(w, nil)
 }

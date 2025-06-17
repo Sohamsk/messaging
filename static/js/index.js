@@ -1,9 +1,6 @@
 const chatDiv = document.getElementById("chat-app");
-const username = chatDiv.dataset.username;
 
-const ws = new WebSocket(
-  "ws://" + location.host + "/ws?username=" + encodeURIComponent(username),
-);
+const ws = new WebSocket("ws://" + location.host + "/ws");
 
 ws.onmessage = (event) => {
   const data = event.data;

@@ -5,17 +5,22 @@ import (
 	"net/http"
 
 	"github.com/Sohamsk/messaging/internal/service"
+	"github.com/Sohamsk/messaging/internal/service/sessions"
 	"github.com/gorilla/websocket"
 )
 
 var upgrader = websocket.Upgrader{}
 
 func (h *Hub) Connect(w http.ResponseWriter, r *http.Request) {
-	username := r.URL.Query().Get("username")
+	cookie, err := r.Cookie("session_id")
+	if err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
 
-	if username == "" {
-		log.Println("Error: empty username attempted by " + r.RemoteAddr)
-		http.Error(w, "Need to send username", http.StatusBadRequest)
+	username, err := sessions.GetUserName(cookie.Value)
+	if err != nil {
+		http.Error(w, "unauthorized", http.StatusUnauthorized)
 		return
 	}
 

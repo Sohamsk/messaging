@@ -1,9 +1,11 @@
 package websockets
 
 import (
+	"encoding/json"
 	"log"
 	"sync"
 
+	"github.com/Sohamsk/messaging/internal/models"
 	"github.com/gorilla/websocket"
 )
 
@@ -14,23 +16,25 @@ type Client struct {
 
 type Hub struct {
 	Clients   map[string]*Client
-	Broadcast chan string
+	Broadcast chan models.Message
 	mu        sync.Mutex
 }
 
 func NewHub() *Hub {
 	return &Hub{
 		Clients:   make(map[string]*Client),
-		Broadcast: make(chan string),
+		Broadcast: make(chan models.Message),
 	}
 }
 
 func (h *Hub) HandleMessages() {
 	for {
 		msg := <-h.Broadcast
+		mess, _ := json.Marshal(msg)
+
 		h.mu.Lock()
 		for name, client := range h.Clients {
-			err := client.Conn.WriteMessage(websocket.TextMessage, []byte(msg))
+			err := client.Conn.WriteMessage(websocket.TextMessage, []byte(mess))
 			if err != nil {
 				log.Println("WebSocket error: ", err)
 				client.Conn.Close()

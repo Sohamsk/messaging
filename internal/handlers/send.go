@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"log"
 	"net/http"
+	"time"
 
+	"github.com/Sohamsk/messaging/internal/models"
 	"github.com/Sohamsk/messaging/internal/service"
 	"github.com/Sohamsk/messaging/internal/service/sessions"
 	"github.com/Sohamsk/messaging/internal/websockets"
@@ -28,11 +29,20 @@ func HandleSend(h *websockets.Hub) func(http.ResponseWriter, *http.Request) {
 			http.Error(w, "unauthorized", http.StatusUnauthorized)
 			return
 		}
-		log.Println("Debug: ", username)
+
+		if _, exists := h.Clients[username]; !exists {
+			http.Error(w, "WebSocket disconnected!!! cannot procceed", http.StatusConflict)
+			return
+		}
 
 		msg := r.FormValue("message")
-		service.SaveMessages(msg)
+		mess := models.Message{
+			Username:  username,
+			Content:   msg,
+			Timestamp: time.Now(),
+		}
+		service.SaveMessages(mess)
 
-		h.Broadcast <- msg
+		h.Broadcast <- mess
 	}
 }

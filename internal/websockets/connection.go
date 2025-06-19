@@ -48,7 +48,10 @@ func (h *Hub) Connect(w http.ResponseWriter, r *http.Request) {
 
 	for {
 		if _, _, err := conn.NextReader(); err != nil {
+			delete(h.Clients, username)
 			break
 		}
 	}
+
+	log.Println("User: " + username + " disconnected")
 }

@@ -5,6 +5,8 @@ body {
 }
 
 .messages {
+    display: flex;
+    flex-direction: column-reverse;
     border: 1px solid #ccc;
     padding: 10px;
     height: 400px;
@@ -12,9 +14,38 @@ body {
 }
 
 .message {
-    margin-bottom: 10px;
-    padding: 5px;
-    border-bottom: 1px solid #eee;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: background 0.2s ease-in-out;
+}
+
+.message:hover {
+  background-color: #f1f1f1;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.sender {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.time {
+  font-size: 0.85em;
+  color: #888;
+}
+
+.content {
+  font-size: 1em;
+  color: #333;
+  word-wrap: break-word;
 }
 
 .input-area {

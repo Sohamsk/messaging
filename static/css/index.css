@@ -1,63 +1,87 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
     max-width: 600px;
-    margin: 50px auto;
+    margin: 0 auto; /* center on larger screens */
+    height: 100%;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .messages {
+    flex: 1;  /* take remaining vertical space */
     display: flex;
     flex-direction: column-reverse;
     border: 1px solid #ccc;
     padding: 10px;
-    height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
+    min-height: 0; /* necessary for flex children */
 }
 
 .message {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-bottom: 12px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  transition: background 0.2s ease-in-out;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: background 0.2s ease-in-out;
 }
 
 .message:hover {
-  background-color: #f1f1f1;
+    background-color: #f1f1f1;
 }
 
 .message-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
 }
 
 .sender {
-  font-weight: bold;
-  color: #2c3e50;
+    font-weight: bold;
+    color: #2c3e50;
 }
 
 .time {
-  font-size: 0.85em;
-  color: #888;
+    font-size: 0.85em;
+    color: #888;
 }
 
 .content {
-  font-size: 1em;
-  color: #333;
-  word-wrap: break-word;
+    font-size: 1em;
+    color: #333;
+    word-wrap: break-word;
 }
 
 .input-area {
     display: flex;
-    margin-top: 10px;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background: #fff;
 }
 
 .input-area input {
     flex-grow: 1;
     padding: 8px;
+    min-width: 0; /* prevents overflow in flex container */
 }
 
 .input-area button {
     padding: 8px 12px;
 }
+
+#banner {
+    position: fixed;
+}
+

@@ -1,19 +1,17 @@
-<div id="chat-app">
-    <h1>HTMX Messaging</h1>
+<h1 id="banner">HTMX Messaging</h1>
 
-    <div id="messages" class="messages">
-        <!-- Messages will load here -->
-    </div>
-
-    <form id="send-form" hx-post="/send" hx-trigger="submit" hx-swap="none">
-        <div class="input-area">
-            <input type="text" name="message" placeholder="Type your message..." required autofocus />
-            <button type="submit">Send</button>
-        </div>
-    </form>
-    <script>
-        const script = document.createElement('script');
-        script.src = '/static/js/index.js';
-        document.body.appendChild(script);
-    </script>
+<div id="messages" class="messages">
+    <!-- Messages will load here -->
 </div>
+
+<form id="send-form" hx-post="/send" hx-trigger="submit" hx-swap="none">
+    <div class="input-area">
+        <input type="text" name="message" placeholder="Type your message..." required autofocus />
+        <button type="submit">Send</button>
+    </div>
+</form>
+<script>
+    const script = document.createElement('script');
+    script.src = '/static/js/messaging.js';
+    document.body.appendChild(script);
+</script>

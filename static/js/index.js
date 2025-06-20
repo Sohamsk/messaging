@@ -1,43 +1,72 @@
+let ws;
+let reconnectAttempts = 0
+let reconnecting = false
+const messages = document.getElementById("messages");
+
 function CreateMessage(data) {
   const message = document.createElement("div");
   message.classList.add("message");
 
-  const header = document.createElement("div")
-  header.classList.add("message-header")
+  const header = document.createElement("div");
+  header.classList.add("message-header");
 
-  const sender = document.createElement("span")
-  sender.classList.add("sender")
-  sender.textContent = data.username
+  const sender = document.createElement("span");
+  sender.classList.add("sender");
+  sender.textContent = data.username;
 
-  header.appendChild(sender)
-  message.appendChild(header)
+  header.appendChild(sender);
+  message.appendChild(header);
 
   const content = document.createElement("div");
-  content.classList.add("content")
-  content.textContent = data.content
+  content.classList.add("content");
+  content.textContent = data.content;
 
-  message.appendChild(content)
+  message.appendChild(content);
 
-  const messages = document.getElementById("messages");
   messages.insertBefore(message, messages.firstChild);
 
   messages.scrollTop = messages.scrollHeight;
 }
 
-const chatDiv = document.getElementById("chat-app");
+function connectWebsocket() {
+  ws = new WebSocket("ws://" + location.host + "/ws");
 
-const ws = new WebSocket("ws://" + location.host + "/ws");
+  ws.onopen = () => {
+    console.log("Websocket opened");
+    reconnecting = false
 
-ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
+    messages.textContent = ""    
+  };
 
-  CreateMessage(data)
+  ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
 
-};
+    CreateMessage(data);
+  };
 
-ws.onclose = () => {
-  console.log("Websocket Closed");
-};
+  ws.onerror = (e) => {
+    console.error("Websocket error: ", e);
+    ws.close();
+  };
+
+  ws.onclose = (e) => {
+    console.warn("Websocket disconnected: ", e.reason);
+    reconnect();
+  };
+}
+
+function reconnect() {
+  if (reconnecting) return
+  reconnecting = true
+
+  reconnectAttempts++;
+  const timeout = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
+  console.log(`Reconnecting in ${timeout / 1000}s...`);
+
+  setTimeout(() => {
+    connectWebsocket();
+  }, timeout);
+}
 
 document
   .getElementById("send-form")
@@ -50,3 +79,5 @@ document
       console.warn("Form submission failed with status:", status);
     }
   });
+
+connectWebsocket();
